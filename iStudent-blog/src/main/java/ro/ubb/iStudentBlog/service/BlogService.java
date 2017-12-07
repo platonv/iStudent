@@ -1,7 +1,7 @@
 package ro.ubb.iStudentBlog.service;
 
 import org.springframework.stereotype.Service;
-import ro.ubb.iStudentBlog.model.Blogpiece;
+import ro.ubb.iStudentBlog.model.BlogPiece;
 import ro.ubb.iStudentBlog.repository.BlogRepository;
 
 import java.util.List;
@@ -17,12 +17,19 @@ public class BlogService {
         this.blogRepository = blogRepository;
     }
 
-    public void addBlogPiece(String content, String user){
-        Blogpiece blogpiece= new Blogpiece(content,user,0);
-        blogRepository.save(blogpiece);
+    public void addBlogPiece(BlogPiece blogPiece){
+        blogRepository.save(blogPiece);
     }
 
-    public List<Blogpiece> findAll() {
+    public List<BlogPiece> findAll() {
         return  blogRepository.findAll();
+    }
+
+    public void removeBlogPiece(BlogPiece blogPiece){
+        blogRepository.delete(blogPiece);
+    }
+
+    public void updateBlogPiece(BlogPiece blogPiece){
+        blogRepository.save(blogPiece);
     }
 }

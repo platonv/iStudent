@@ -3,7 +3,6 @@ package ro.ubb.iStudentBlog.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.annotation.Generated;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,7 +11,7 @@ import java.util.UUID;
  */
 
 @Document(collection = "blogpiece")
-public class Blogpiece {
+public class BlogPiece {
 
     @Id
     private UUID uuid;
@@ -21,14 +20,22 @@ public class Blogpiece {
     private String user;
     private Integer rating;
 
-    public Blogpiece() {
+    public BlogPiece() {
     }
 
-    public Blogpiece( String content, String user, Integer rating) {
+    public BlogPiece(String content, String user, Integer rating) {
         this.uuid = UUID.randomUUID();
         this.content = content;
         this.user = user;
         this.rating = rating;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public String getContent() {
@@ -60,9 +67,9 @@ public class Blogpiece {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Blogpiece blogpiece = (Blogpiece) o;
-        return Objects.equals(uuid, blogpiece.uuid) &&
-                Objects.equals(content, blogpiece.content);
+        BlogPiece blogPiece = (BlogPiece) o;
+        return Objects.equals(uuid, blogPiece.uuid) &&
+                Objects.equals(content, blogPiece.content);
 
 
     }
@@ -74,7 +81,7 @@ public class Blogpiece {
 
     @Override
     public String toString() {
-        return "ro.ubb.iStudentBlog.model.Blogpiece{" +
+        return "ro.ubb.iStudentBlog.model.BlogPiece{" +
                 "content='" + content + '\'' +
                 ", user='" + user + '\'' +
                 ", rating=" + rating +
