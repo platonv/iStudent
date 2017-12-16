@@ -15,6 +15,8 @@ public class BlogService {
 
     public BlogService(BlogRepository blogRepository) {
         this.blogRepository = blogRepository;
+        blogRepository.save(new BlogPiece("good news","teacher",0));
+        blogRepository.save(new BlogPiece("bad news","teacher",7));
     }
 
     public void addBlogPiece(BlogPiece blogPiece){

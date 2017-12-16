@@ -2,9 +2,8 @@ package ro.ubb.iStudentBlog.DTO;
 
 import ro.ubb.iStudentBlog.model.BlogPiece;
 
-import java.util.UUID;
-
-public class BlogPieceDTO {
+import java.io.Serializable;
+public class BlogPieceDTO implements Serializable{
 
     private String content;
     //here it should be a User class but that will change once auth is finished
