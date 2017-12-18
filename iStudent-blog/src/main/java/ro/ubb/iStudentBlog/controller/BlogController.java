@@ -2,17 +2,14 @@ package ro.ubb.iStudentBlog.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import ro.ubb.iStudentBlog.DTO.BlogPieceDTO;
-import ro.ubb.iStudentBlog.model.BlogPiece;
+import org.springframework.web.bind.annotation.*;
+import ro.ubb.iStudentBlog.DTO.AddRatingDto;
+import ro.ubb.iStudentBlog.DTO.BlogPieceDto;
+import ro.ubb.iStudentBlog.DTO.CreateBlogPieceDto;
+import ro.ubb.iStudentBlog.DTO.UpdateBlogPieceDto;
 import ro.ubb.iStudentBlog.service.BlogService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Cata on 12/6/2017.
@@ -22,35 +19,51 @@ import java.util.stream.Collectors;
 public class BlogController {
     private static final Logger log = LoggerFactory.getLogger(BlogController.class);
 
-    @Autowired
-    BlogService blogService;
+    private final BlogService blogService;
 
-    @RequestMapping(value = "/blogs", method = RequestMethod.GET)
-    public List<BlogPieceDTO> getAll(){
+    public BlogController(final BlogService blogService) {
+        this.blogService = blogService;
+    }
+
+    @GetMapping
+    public BlogPieceDto getBlogPiece(@RequestParam final String id){
+        return this.blogService.getBlogPiece(id);
+    }
+
+    @GetMapping("/blogs")
+    public List<BlogPieceDto> getAll() {
         log.trace("getting all BlogPieces");
-        List<BlogPiece> blogPieces = blogService.findAll();
-        log.trace("Got BlogPieces={}",blogPieces);
-        return blogPieces.stream().map(BlogPieceDTO::new).collect(Collectors.toList());
+        final List<BlogPieceDto> blogPieces = blogService.findAll();
+        log.trace("Got BlogPieces={}", blogPieces);
+        return blogPieces;
     }
 
-    @RequestMapping(value = "/createPiece",method = RequestMethod.POST)
-    public void createPiece(@RequestBody BlogPieceDTO blogPieceDTO){
-        log.trace("Adding BLogPiece={}",blogPieceDTO);
-        blogService.addBlogPiece(blogPieceDTO.toPOJO());
+    @PostMapping("/createPiece")
+    public String createPiece(@RequestBody final CreateBlogPieceDto createBlogPieceDto) {
+        log.trace("Adding BLogPiece={}", createBlogPieceDto);
+        final String id = blogService.addBlogPiece(createBlogPieceDto);
         log.trace("Added BlogPiece!");
+        return id;
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public void removePiece(@RequestBody BlogPieceDTO blogPieceDTO){
-        log.trace("Removing BLogPiece={}",blogPieceDTO);
-        blogService.removeBlogPiece(blogPieceDTO.toPOJO());
+    @PostMapping("/addRating")
+    public void addRating(@RequestBody final AddRatingDto addRatingDto) {
+        log.trace("Add rating to blogPiece!");
+        this.blogService.addRatingToBlogPiece(addRatingDto);
+        log.trace("Added rating to blogPiece!");
+    }
+
+    @DeleteMapping("/deletePiece")
+    public void removePiece(@RequestParam final String id) {
+        log.trace("Removing BLogPiece={}", id);
+        blogService.removeBlogPiece(id);
         log.trace("Removed BlogPiece!");
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public void updatePiece(@RequestBody BlogPieceDTO blogPieceDTO){
-        log.trace("Updating BLogPiece={}",blogPieceDTO);
-        blogService.updateBlogPiece(blogPieceDTO.toPOJO());
+    @PostMapping("/updatePiece")
+    public void updatePiece(@RequestBody final UpdateBlogPieceDto updateBlogPieceDto) {
+        log.trace("Updating BLogPiece={}", updateBlogPieceDto);
+        blogService.updateBlogPiece(updateBlogPieceDto);
         log.trace("Updated BlogPiece!");
     }
 

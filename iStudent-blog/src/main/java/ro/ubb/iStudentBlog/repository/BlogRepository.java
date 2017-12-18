@@ -8,5 +8,5 @@ import java.util.UUID;
 /**
  * Created by Cata on 12/6/2017.
  */
-public interface BlogRepository extends MongoRepository<BlogPiece, UUID> {
+public interface BlogRepository extends MongoRepository<BlogPiece, String> {
 }
