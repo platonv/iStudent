@@ -62,10 +62,11 @@ public class BlogService {
         this.blogRepository.delete(id);
     }
 
-    public void updateBlogPiece(final UpdateBlogPieceDto updateBlogPieceDto) {
+    public BlogPiece updateBlogPiece(final UpdateBlogPieceDto updateBlogPieceDto) {
         final BlogPiece blogPiece = this.blogRepository.findOne(updateBlogPieceDto.getUuid());
         blogPiece.setContent(updateBlogPieceDto.getContent());
         this.blogRepository.save(blogPiece);
+        return blogPiece;
     }
 
 }
