@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gateway-ingress
+spec:
+  backend:
+    serviceName: default-http-backend
+    servicePort: 80
+  rules:
+  - host: 192.168.99.101
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: blog-service
+          servicePort: 2222
