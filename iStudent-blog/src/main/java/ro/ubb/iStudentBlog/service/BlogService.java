@@ -2,6 +2,7 @@ package ro.ubb.iStudentBlog.service;
 
 import org.springframework.stereotype.Service;
 import ro.ubb.iStudentBlog.DTO.*;
+import ro.ubb.iStudentBlog.exception.EntityNotFoundException;
 import ro.ubb.iStudentBlog.mapper.BlogMapper;
 import ro.ubb.iStudentBlog.mapper.BlogPieceMapper;
 import ro.ubb.iStudentBlog.mapper.CreateBlogPieceMapper;
@@ -11,9 +12,7 @@ import ro.ubb.iStudentBlog.model.Rating;
 import ro.ubb.iStudentBlog.repository.BlogRepository;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,14 +25,19 @@ public class BlogService {
 
     public BlogService(final BlogRepository blogRepository) {
         this.blogRepository = blogRepository;
-        addDataToDb(blogRepository);
+        //addDataToDb(blogRepository);
     }
 
     private void addDataToDb(final BlogRepository blogRepository) {
-//        final Rating rating = this.ratingService.save(0);
-//        final Rating rating1 = this.ratingService.save(7);
-//        blogRepository.save(BlogPiece.builder().content("good news").user("teacher").ratings(Arrays.asList(rating)).build());
-//        blogRepository.save(BlogPiece.builder().content("bad news").user("teacher").ratings(Arrays.asList(rating1)).build());
+        final Rating rating = Rating.builder().rate(1).build();
+        final Rating rating1 = Rating.builder().rate(5).build();
+        List<BlogPiece> blogPieces = new ArrayList<>();
+        blogPieces.add(BlogPiece.builder().content("good news").user("teacher").ratings(Arrays.asList(rating)).build());
+        blogPieces.add(BlogPiece.builder().content("bad news").user("teacher").ratings(Arrays.asList(rating1)).build());
+        List<String> collabs = new ArrayList<>();
+        collabs.add("Mihai");
+        collabs.add("Ion");
+        blogRepository.save(Blog.builder().blogPieces(blogPieces).collaborators(collabs).owner("Bogdan").uuid(UUID.randomUUID().toString()).build());
     }
 
     public List<BlogDto> getAllBlogs(){
@@ -90,8 +94,39 @@ public class BlogService {
         this.blogRepository.delete(id);
     }
 
-    public BlogPiece updateBlogPiece(final UpdateBlogPieceDto updateBlogPieceDto) {
-        throw new NotImplementedException();
+    public BlogPiece updateBlogPiece(final String blogId, final UpdateBlogPieceDto updateBlogPieceDto) {
+        final Blog blog = blogRepository.findOne(blogId);
+        final Optional<BlogPiece> blogPiece = findBlogPiece(blog,updateBlogPieceDto.getUuid());
+        if(blogPiece.isPresent())
+            blogPiece.get().setContent(updateBlogPieceDto.getContent());
+        else
+            throw new EntityNotFoundException("BlogPiece does not exist!");
+        blogRepository.save(blog);
+        return blogPiece.get();
     }
 
+    public BlogDto addCollaboratorToBlog(String collaborator,String blogId){
+        final Blog blog = blogRepository.findOne(blogId);
+        List<String> collaborators = blog.getCollaborators();
+        collaborators.add(collaborator);
+        blog.setCollaborators(collaborators);
+        blogRepository.save(blog);
+        return BlogMapper.toDto(blog);
+    }
+
+    public BlogDto removeCollaboratorToBlog(String collaborator,String blogId){
+        final Blog blog = blogRepository.findOne(blogId);
+        List<String> collaborators = blog.getCollaborators();
+        collaborators.remove(collaborator);
+        blog.setCollaborators(collaborators);
+        blogRepository.save(blog);
+        return BlogMapper.toDto(blog);
+    }
+
+    private Optional<BlogPiece> findBlogPiece(Blog blog, String blogPieceId){
+        for(BlogPiece blogPiece : blog.getBlogPieces())
+            if(blogPiece.getUuid().equals(blogPieceId))
+                return Optional.of(blogPiece);
+        return Optional.empty();
+    }
 }

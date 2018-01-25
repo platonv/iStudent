@@ -1,5 +1,7 @@
 package ro.ubb.iStudentBlog.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.ubb.iStudentBlog.DTO.BlogDto;
 import ro.ubb.iStudentBlog.DTO.BlogPieceDto;
@@ -22,23 +24,33 @@ public class BlogController {
     }
 
     @GetMapping
-    public List<BlogDto> getBlogs() {
-        return this.blogService.getAllBlogs();
+    public ResponseEntity getBlogs() {
+        return new ResponseEntity<>(this.blogService.getAllBlogs(),HttpStatus.OK);
     }
 
     @GetMapping("/blog")
-    public BlogDto getBlog(@RequestParam final String id) {
-        return this.blogService.getBlog(id);
+    public ResponseEntity getBlog(@RequestParam final String id) {
+        return new ResponseEntity<>(this.blogService.getBlog(id),HttpStatus.OK);
     }
 
     @PostMapping("/blog")
-    public BlogDto createBlog(@RequestBody final CreateBlogDto createBlogDto) {
-        return this.blogService.createBlog(createBlogDto);
+    public ResponseEntity createBlog(@RequestBody final CreateBlogDto createBlogDto) {
+        return new ResponseEntity<>(this.blogService.createBlog(createBlogDto),HttpStatus.OK);
     }
 
     @GetMapping("/blogPieces")
-    public List<BlogPieceDto> getBlogPieces(@RequestParam final String blogId) {
-        return this.blogService.getPiecesForBlog(blogId);
+    public ResponseEntity getBlogPieces(@RequestParam final String blogId) {
+        return new ResponseEntity<>(this.blogService.getPiecesForBlog(blogId), HttpStatus.OK);
+    }
+
+    @PostMapping("/addCollaborator")
+    public ResponseEntity addCollaborator(@RequestBody final String blogId, final String collaborator){
+        return new ResponseEntity<>(this.blogService.addCollaboratorToBlog(collaborator,blogId),HttpStatus.OK);
+    }
+
+    @PostMapping("/removeCollaborator")
+    public ResponseEntity removeCollaborator(@RequestBody final String blogId, final String collaborator){
+        return new ResponseEntity<>(this.blogService.removeCollaboratorToBlog(collaborator,blogId),HttpStatus.OK);
     }
 
 }

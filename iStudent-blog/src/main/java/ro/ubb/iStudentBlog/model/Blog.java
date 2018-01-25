@@ -19,5 +19,4 @@ public class Blog{
     private String owner;
     private List<String> collaborators;
     private List<BlogPiece> blogPieces;
-
 }
