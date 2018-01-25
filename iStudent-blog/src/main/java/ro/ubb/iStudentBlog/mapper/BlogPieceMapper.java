@@ -5,6 +5,7 @@ import ro.ubb.iStudentBlog.DTO.BlogPieceDto;
 import ro.ubb.iStudentBlog.model.BlogPiece;
 import ro.ubb.iStudentBlog.model.Rating;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class BlogPieceMapper {
     }
 
     public List<BlogPieceDto> toDtos(final List<BlogPiece> entities) {
-        return entities.stream()
+        return entities == null ? new ArrayList<>() : entities.stream()
                 .map(BlogPieceMapper::toDto)
                 .collect(Collectors.toList());
     }

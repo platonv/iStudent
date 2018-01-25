@@ -1,24 +1,18 @@
 package ro.ubb.iStudentBlog.controller;
 
-import org.slf4j.event.Level;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ro.ubb.iStudentBlog.DTO.AddRatingDto;
+import ro.ubb.iStudentBlog.DTO.BlogDto;
 import ro.ubb.iStudentBlog.DTO.BlogPieceDto;
-import ro.ubb.iStudentBlog.DTO.CreateBlogPieceDto;
-import ro.ubb.iStudentBlog.DTO.UpdateBlogPieceDto;
-import ro.ubb.iStudentBlog.logging.LogMethodCall;
+import ro.ubb.iStudentBlog.DTO.CreateBlogDto;
 import ro.ubb.iStudentBlog.service.BlogService;
 
 import java.util.List;
 
 /**
- * Created by Cata on 12/6/2017.
+ * @author ciprian.mosincat on 1/25/2018.
  */
-@LogMethodCall
 @RestController
-@RequestMapping("/blogpiece")
+@RequestMapping("/blogs")
 public class BlogController {
 
     private final BlogService blogService;
@@ -28,30 +22,23 @@ public class BlogController {
     }
 
     @GetMapping
-    public ResponseEntity getBlogPiece(@RequestParam final String blogId, @RequestParam final String blogPieceId) {
-        return new ResponseEntity<>(this.blogService.getBlogPiece(blogId, blogPieceId),HttpStatus.OK);
+    public List<BlogDto> getBlogs() {
+        return this.blogService.getAllBlogs();
     }
 
-    @PostMapping("/createPiece")
-    public ResponseEntity createPiece(@RequestBody final CreateBlogPieceDto createBlogPieceDto) {
-        return new ResponseEntity<>(blogService.addBlogPiece(createBlogPieceDto),HttpStatus.OK);
+    @GetMapping("/blog")
+    public BlogDto getBlog(@RequestParam final String id) {
+        return this.blogService.getBlog(id);
     }
 
-    @PostMapping("/addRating")
-    public ResponseEntity addRating(@RequestBody final AddRatingDto addRatingDto) {
-        this.blogService.addRatingToBlogPiece(addRatingDto);
-        return new ResponseEntity<>("Add successful",HttpStatus.OK);
+    @PostMapping("/blog")
+    public BlogDto createBlog(@RequestBody final CreateBlogDto createBlogDto) {
+        return this.blogService.createBlog(createBlogDto);
     }
 
-    @DeleteMapping("/deletePiece")
-    public ResponseEntity removePiece(@RequestParam final String id) {
-        blogService.removeBlogPiece(id);
-        return new ResponseEntity<>("Remove successful",HttpStatus.OK);
-    }
-
-    @PostMapping("/updatePiece")
-    public ResponseEntity updatePiece(@RequestBody final UpdateBlogPieceDto updateBlogPieceDto) {
-        return new ResponseEntity<>(blogService.updateBlogPiece(updateBlogPieceDto),HttpStatus.OK);
+    @GetMapping("/blogPieces")
+    public List<BlogPieceDto> getBlogPieces(@RequestParam final String blogId) {
+        return this.blogService.getPiecesForBlog(blogId);
     }
 
 }
