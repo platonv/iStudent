@@ -1,0 +1,3 @@
+include 'iStudent-blog'
+findProject(':iStudent-blog')?.name = 'iStudent-Blog'
+

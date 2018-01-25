@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: istudent-blog
+  labels:
+    run: istudent-blog
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: istudent-blog
+    spec:
+      containers:
+      - name: istudent-blog
+        image: platonv/istudent-blog
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+      - name: mongo
+        image: library/mongo
+        ports:
+        - containerPort: 27017
+          protocol: TCP

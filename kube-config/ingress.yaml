@@ -4,13 +4,5 @@ metadata:
   name: gateway-ingress
 spec:
   backend:
-    serviceName: default-http-backend
+    serviceName: blog-service
     servicePort: 80
-  rules:
-  - host: 192.168.99.101
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: blog-service
-          servicePort: 2222
