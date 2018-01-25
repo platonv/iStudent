@@ -10,7 +10,6 @@ import ro.ubb.iStudentBlog.model.Blog;
 import ro.ubb.iStudentBlog.model.BlogPiece;
 import ro.ubb.iStudentBlog.model.Rating;
 import ro.ubb.iStudentBlog.repository.BlogRepository;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,15 +24,16 @@ public class BlogService {
 
     public BlogService(final BlogRepository blogRepository) {
         this.blogRepository = blogRepository;
-        //addDataToDb(blogRepository);
+        addDataToDb(blogRepository);
     }
 
     private void addDataToDb(final BlogRepository blogRepository) {
+        blogRepository.deleteAll();
         final Rating rating = Rating.builder().rate(1).build();
         final Rating rating1 = Rating.builder().rate(5).build();
         List<BlogPiece> blogPieces = new ArrayList<>();
-        blogPieces.add(BlogPiece.builder().content("good news").user("teacher").ratings(Arrays.asList(rating)).build());
-        blogPieces.add(BlogPiece.builder().content("bad news").user("teacher").ratings(Arrays.asList(rating1)).build());
+        blogPieces.add(BlogPiece.builder().uuid(UUID.randomUUID().toString()).content("good news").user("teacher").ratings(Arrays.asList(rating)).build());
+        blogPieces.add(BlogPiece.builder().uuid(UUID.randomUUID().toString()).content("bad news").user("teacher").ratings(Arrays.asList(rating1)).build());
         List<String> collabs = new ArrayList<>();
         collabs.add("Mihai");
         collabs.add("Ion");

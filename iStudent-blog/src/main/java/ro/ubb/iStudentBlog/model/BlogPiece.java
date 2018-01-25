@@ -24,4 +24,46 @@ public class BlogPiece {
     private String user;
     private List<Rating> ratings;
 
+    private BlogPiece(BlogPieceBuilder builder){
+        this.uuid = builder.uuid;
+        this.content = builder.content;
+        this.user = builder.user;
+        this.ratings = builder.ratings;
+    }
+
+    public static BlogPieceBuilder builder(){
+        return new BlogPieceBuilder();
+    }
+
+
+    public static class BlogPieceBuilder{
+        private String uuid;
+        private String content;
+        private String user;
+        private List<Rating> ratings;
+
+        public BlogPiece build(){
+            return new BlogPiece(this);
+        }
+
+        public BlogPieceBuilder uuid(String uuid){
+            this.uuid = uuid;
+            return this;
+        }
+
+        public BlogPieceBuilder content(String content){
+            this.content = content;
+            return this;
+        }
+
+        public BlogPieceBuilder user(String user){
+            this.user = user;
+            return this;
+        }
+
+        public BlogPieceBuilder ratings(List<Rating> ratings){
+            this.ratings = ratings;
+            return this;
+        }
+    }
 }
