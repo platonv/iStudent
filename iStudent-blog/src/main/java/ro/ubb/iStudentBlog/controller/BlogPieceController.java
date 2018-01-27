@@ -44,8 +44,8 @@ public class BlogPieceController {
     }
 
     @DeleteMapping("/deletePiece")
-    public ResponseEntity removePiece(@RequestParam final String id) {
-        blogService.removeBlogPiece(id);
+    public ResponseEntity removePiece(@RequestParam final String blogId, @RequestParam final String blogPieceId) {
+        blogService.removeBlogPiece(blogId, blogPieceId);
         return new ResponseEntity<>("Remove successful",HttpStatus.OK);
     }
 

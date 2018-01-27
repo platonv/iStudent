@@ -90,8 +90,16 @@ public class BlogService {
         return BlogPieceMapper.toDtos(blog.getBlogPieces());
     }
 
-    public void removeBlogPiece(final String id) {
-        this.blogRepository.delete(id);
+    public void removeBlogPiece(final String blogId, final String blogpieceId) {
+        final Blog blog = blogRepository.findOne(blogId);
+
+        findBlogPiece(blog, blogpieceId).ifPresent(piece ->
+        {
+            List<BlogPiece> newPieces = blog.getBlogPieces();
+            newPieces.remove(piece);
+            blog.setBlogPieces(newPieces);
+            blogRepository.save(blog);
+        });
     }
 
     public BlogPiece updateBlogPiece(final String blogId, final UpdateBlogPieceDto updateBlogPieceDto) {
