@@ -50,7 +50,7 @@ public class BlogPieceController {
     }
 
     @PostMapping("/updatePiece")
-    public ResponseEntity updatePiece(@RequestBody final UpdateBlogPieceDto updateBlogPieceDto,@RequestBody String blogId) {
+    public ResponseEntity updatePiece(@RequestParam final UpdateBlogPieceDto updateBlogPieceDto,@RequestParam final String blogId) {
         return new ResponseEntity<>(blogService.updateBlogPiece(blogId,updateBlogPieceDto),HttpStatus.OK);
     }
 

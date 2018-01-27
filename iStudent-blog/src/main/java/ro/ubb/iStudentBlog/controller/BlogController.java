@@ -44,12 +44,12 @@ public class BlogController {
     }
 
     @PostMapping("/addCollaborator")
-    public ResponseEntity addCollaborator(@RequestBody final String blogId, final String collaborator){
+    public ResponseEntity addCollaborator(@RequestParam final String blogId,@RequestParam final String collaborator){
         return new ResponseEntity<>(this.blogService.addCollaboratorToBlog(collaborator,blogId),HttpStatus.OK);
     }
 
     @PostMapping("/removeCollaborator")
-    public ResponseEntity removeCollaborator(@RequestBody final String blogId, final String collaborator){
+    public ResponseEntity removeCollaborator(@RequestParam final String blogId,@RequestParam final String collaborator){
         return new ResponseEntity<>(this.blogService.removeCollaboratorToBlog(collaborator,blogId),HttpStatus.OK);
     }
 
